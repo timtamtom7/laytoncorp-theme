@@ -32,12 +32,27 @@
 						<span class="hamburger-inner"></span>
 					</span>
 				</button>
-				<ul class="nav-menu">
-					<li><a href="#about">About</a></li>
-					<li><a href="#portfolio">Brands</a></li>
-					<li><a href="#capabilities">Capabilities</a></li>
-					<li><a href="#contact">Contact</a></li>
-				</ul>
+				<?php
+				wp_nav_menu(
+					array(
+						'theme_location' => 'primary',
+						'menu_id'        => 'primary-menu',
+						'container'      => false,
+						'menu_class'     => 'nav-menu',
+						'fallback_cb'    => function() {
+							// Fallback to hardcoded anchors if no menu is assigned
+							?>
+							<ul class="nav-menu">
+								<li><a href="#about">About</a></li>
+								<li><a href="#portfolio">Brands</a></li>
+								<li><a href="#capabilities">Capabilities</a></li>
+								<li><a href="#contact">Contact</a></li>
+							</ul>
+							<?php
+						},
+					)
+				);
+				?>
 			</nav><!-- #site-navigation -->
 		</div><!-- .container -->
 	</header><!-- #masthead -->
