@@ -139,6 +139,8 @@ a:hover {
 	text-transform: uppercase;
 	letter-spacing: 0.05em;
 	color: var(--color-text);
+	position: relative;
+	z-index: 102; /* Above mobile menu overlay */
 }
 
 .nav-menu {
@@ -155,6 +157,62 @@ a:hover {
 	text-transform: uppercase;
 	letter-spacing: 0.05em;
 	color: var(--color-text);
+}
+
+/* Mobile Menu Toggle */
+.menu-toggle {
+	display: none;
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	padding: 10px;
+	z-index: 102; /* Above overlay */
+	position: relative;
+}
+
+.hamburger-box {
+	display: block;
+	width: 24px;
+	height: 24px;
+	position: relative;
+}
+
+.hamburger-inner,
+.hamburger-inner::before,
+.hamburger-inner::after {
+	width: 24px;
+	height: 2px;
+	background-color: var(--color-text);
+	position: absolute;
+	transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.hamburger-inner {
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.hamburger-inner::before {
+	content: '';
+	top: -8px;
+}
+
+.hamburger-inner::after {
+	content: '';
+	top: 8px;
+}
+
+/* Mobile Menu Active State (Hamburger Animation) */
+.menu-open .hamburger-inner {
+	background-color: transparent;
+}
+
+.menu-open .hamburger-inner::before {
+	transform: translateY(8px) rotate(45deg);
+}
+
+.menu-open .hamburger-inner::after {
+	transform: translateY(-8px) rotate(-45deg);
 }
 
 /* Hero System */
@@ -513,6 +571,30 @@ section.is-visible {
 	}
 	
 	.nav-menu {
-		display: none; /* Hide standard nav on mobile for now */
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100vh;
+		background-color: var(--color-bg);
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: var(--space-6);
+		transform: translateY(-100%);
+		transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+		z-index: 101; /* Below toggle/logo, above everything else */
+	}
+
+	.menu-open .nav-menu {
+		transform: translateY(0);
+	}
+
+	.nav-menu li a {
+		font-size: 1.5rem; /* Larger font for mobile */
+	}
+
+	.menu-toggle {
+		display: block;
 	}
 }

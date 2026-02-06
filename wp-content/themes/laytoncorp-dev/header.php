@@ -27,6 +27,11 @@
 			</div><!-- .site-branding -->
 
 			<nav id="site-navigation" class="main-navigation">
+				<button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false">
+					<span class="hamburger-box">
+						<span class="hamburger-inner"></span>
+					</span>
+				</button>
 				<ul class="nav-menu">
 					<li><a href="#about">About</a></li>
 					<li><a href="#portfolio">Brands</a></li>

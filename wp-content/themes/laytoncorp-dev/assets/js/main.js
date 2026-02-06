@@ -104,6 +104,7 @@
 	window.addEventListener('load', () => {
 		observeSections();
 		handleHeaderScroll();
+		initMobileMenu();
 		initSlideshow();
 	});
 
