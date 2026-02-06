@@ -528,16 +528,60 @@ section.is-visible {
 
 /* Footer */
 .site-footer {
-	padding: var(--space-6) 0;
+	padding: var(--space-8) 0;
 	border-top: 1px solid var(--color-border);
 	margin-top: 0;
 	background-color: var(--color-bg);
 }
 
-.footer-content {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: var(--space-6);
+}
+
+.footer-branding .site-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: block;
+    margin-bottom: var(--space-2);
+}
+
+.footer-branding .site-info {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+}
+
+.footer-contact h4,
+.footer-navigation h4 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-3);
+    color: var(--color-text-light);
+}
+
+.footer-contact p {
+    margin-bottom: var(--space-2);
+}
+
+.footer-navigation ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-navigation li {
+    margin-bottom: var(--space-2);
+}
+
+.footer-navigation a {
+    text-decoration: none;
+    color: var(--color-text);
+}
+
+.footer-navigation a:hover {
+    color: var(--color-text-light);
 }
 
 /* Responsive */
@@ -545,6 +589,15 @@ section.is-visible {
 	.portfolio-grid {
 		grid-template-columns: repeat(2, 1fr);
 	}
+    
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .footer-branding {
+        grid-column: span 2;
+        margin-bottom: var(--space-4);
+    }
 }
 
 @media (max-width: 768px) {
@@ -564,11 +617,15 @@ section.is-visible {
 		grid-template-columns: 1fr;
 	}
 
-	.footer-content {
-		flex-direction: column;
-		gap: var(--space-4);
-		text-align: center;
+	.footer-grid {
+		grid-template-columns: 1fr;
+        gap: var(--space-6);
+        text-align: center;
 	}
+    
+    .footer-branding {
+        grid-column: span 1;
+    }
 	
 	.nav-menu {
 		position: fixed;

@@ -29,9 +29,17 @@ if ( ! $subheadline ) {
 	$subheadline = lc_field( 'hero_subtext', 'Infrastructure, innovation, and materials for a changing world.' );
 }
 
-// CTA (Not in Customizer yet, strict ACF/Hardcode for now)
-$cta_text = lc_field( 'hero_cta_text', 'Get in touch' );
-$cta_link = '#contact'; 
+// CTA 
+$cta_text = get_theme_mod( 'hero_cta_text' );
+if ( ! $cta_text && $cta_text !== '' ) { // Check for false (not set), allow empty string
+    $cta_text = lc_field( 'hero_cta_text', 'Get in touch' );
+}
+
+$cta_link = get_theme_mod( 'hero_cta_link' );
+if ( ! $cta_link ) {
+    $cta_link = '#contact'; 
+}
+
 
 // Media Fallbacks
 $default_poster = get_template_directory_uri() . '/assets/images/hero-poster.jpg';
@@ -51,9 +59,9 @@ if ( 'image' === $hero_mode ) {
 // Video Logic
 $video_url = '';
 if ( 'video' === $hero_mode ) {
-    $customizer_video = get_theme_mod( 'hero_video_url' );
-    if ( $customizer_video ) {
-        $video_url = $customizer_video;
+    $customizer_video_id = get_theme_mod( 'hero_video_id' );
+    if ( $customizer_video_id ) {
+        $video_url = wp_get_attachment_url( $customizer_video_id );
     } else {
         $video_url = lc_field( 'hero_video_mp4', get_template_directory_uri() . '/assets/videos/hero-loop.mp4' );
     }
