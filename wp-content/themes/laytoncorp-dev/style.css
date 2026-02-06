@@ -1,5 +1,14 @@
 /*
-Theme Name: Laytoncorp Dev
+Theme Name: Laytoncorp
+Theme URI: https://laytoncorp.com
+Description: Custom, high-end WordPress theme for Laytoncorp. Minimal, performance-focused, and design-forward.
 Author: Optimise
-Version: 0.0.1
+Author URI: https://optimise.com
+Version: 1.0.0
+Text Domain: laytoncorp
+*/
+
+/* 
+   This file is required by WordPress but we will primarily use 
+   assets/css/main.css for our custom styles to keep things modular.
 */
