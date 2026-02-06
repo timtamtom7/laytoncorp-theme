@@ -58,6 +58,9 @@ if ( 'image' === $hero_mode ) {
 
 // Video Logic
 $video_url = '';
+$video_loop = true;
+$video_muted = true;
+
 if ( 'video' === $hero_mode ) {
     $customizer_video_id = get_theme_mod( 'hero_video_id' );
     if ( $customizer_video_id ) {
@@ -65,7 +68,18 @@ if ( 'video' === $hero_mode ) {
     } else {
         $video_url = lc_field( 'hero_video_mp4', get_template_directory_uri() . '/assets/videos/hero-loop.mp4' );
     }
-    $poster_url = lc_field( 'hero_video_poster', $default_poster );
+    
+    // Check Customizer settings (default to true if not set/saved yet)
+    $video_loop = get_theme_mod( 'hero_video_loop', true );
+    $video_muted = get_theme_mod( 'hero_video_muted', true );
+
+    // Customizer poster logic
+    $customizer_poster_id = get_theme_mod( 'hero_video_poster' );
+    if ( $customizer_poster_id ) {
+        $poster_url = wp_get_attachment_url( $customizer_poster_id );
+    } else {
+        $poster_url = lc_field( 'hero_video_poster', $default_poster );
+    }
 }
 
 ?>
@@ -90,7 +104,10 @@ if ( 'video' === $hero_mode ) {
 	<?php elseif ( 'video' === $hero_mode ) : ?>
 
 		<div class="hero-background">
-			<video autoplay muted loop playsinline poster="<?php echo esc_url( $poster_url ); ?>">
+			<video autoplay playsinline 
+                <?php echo $video_muted ? 'muted' : ''; ?> 
+                <?php echo $video_loop ? 'loop' : ''; ?> 
+                poster="<?php echo esc_url( $poster_url ); ?>">
 				<source src="<?php echo esc_url( $video_url ); ?>" type="video/mp4">
 				<img src="<?php echo esc_url( $poster_url ); ?>" alt="Laytoncorp Hero">
 			</video>

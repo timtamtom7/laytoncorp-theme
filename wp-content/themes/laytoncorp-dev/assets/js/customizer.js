@@ -1,90 +1,106 @@
 /**
- * File customizer.js.
+ * Customizer Live Preview
  *
- * Theme Customizer enhancements for a better user experience.
- *
- * Contains handlers to make Theme Customizer preview reload changes asynchronously.
+ * Handles real-time updates for the theme customizer using PostMessage.
+ * This ensures changes are visible instantly without a page refresh.
  */
 
 ( function( $ ) {
 
-	// Hero Headline
-	wp.customize( 'hero_headline', function( value ) {
-		value.bind( function( newval ) {
-			$( '.hero-title' ).text( newval );
-		} );
-	} );
+    // Helper: Update CSS Variable
+    function updateVar( setting, cssVar, suffix = '' ) {
+        wp.customize( setting, function( value ) {
+            value.bind( function( newval ) {
+                document.documentElement.style.setProperty( cssVar, newval + suffix );
+            } );
+        } );
+    }
 
-	// Hero Subtext
-	wp.customize( 'hero_subtext', function( value ) {
-		value.bind( function( newval ) {
-			$( '.hero-subtitle' ).text( newval );
-		} );
-	} );
+    // --- GLOBAL COLORS ---
+    updateVar( 'color_bg', '--color-bg' );
+    updateVar( 'color_text', '--color-text' );
+    updateVar( 'color_accent', '--color-accent' );
 
-    // Hero CTA Text
-    wp.customize( 'hero_cta_text', function( value ) {
+    // --- BUTTONS ---
+    updateVar( 'btn_bg_color', '--btn-bg' );
+    updateVar( 'btn_text_color', '--btn-text' );
+    updateVar( 'btn_radius', '--btn-radius', 'px' );
+    updateVar( 'btn_padding_y', '--btn-pad-y', 'px' );
+    updateVar( 'btn_padding_x', '--btn-pad-x', 'px' );
+    updateVar( 'btn_transform', '--btn-transform' );
+
+    // --- TYPOGRAPHY ---
+    updateVar( 'body_font_size', '--font-size-base', 'px' );
+    updateVar( 'h1_font_size', '--h1-size', 'em' );
+    updateVar( 'h2_font_size', '--h2-size', 'em' );
+    updateVar( 'h3_font_size', '--h3-size', 'em' );
+    updateVar( 'heading_font_weight', '--heading-weight' );
+
+    // --- HEADER ---
+    updateVar( 'header_height', '--header-height', 'px' );
+    updateVar( 'header_bg_scrolled', '--header-bg-scrolled' );
+    updateVar( 'header_logo_width', '--header-logo-width', 'px' );
+    updateVar( 'header_menu_gap', '--header-menu-gap', 'px' );
+
+    // --- FOOTER ---
+    updateVar( 'footer_padding_y', '--footer-pad-y', 'px' );
+    updateVar( 'footer_bg_color', '--footer-bg' );
+    updateVar( 'footer_text_color', '--footer-text' );
+
+    // --- LAYOUT ---
+    updateVar( 'container_width', '--container-width', 'px' );
+    updateVar( 'section_spacing', '--section-spacing', 'px' );
+
+    // --- HERO SECTION ---
+    
+    // Hero Layout & Style
+    updateVar( 'hero_overlay_opacity', '--hero-overlay', '' ); // Needs special handling for rgba
+    wp.customize( 'hero_overlay_opacity', function( value ) {
         value.bind( function( newval ) {
-            var $btn = $( '.hero-content .btn' );
-            if ( newval ) {
-                if ( $btn.length ) {
-                    $btn.text( newval );
-                    $btn.show();
-                }
-            } else {
-                $btn.hide();
-            }
+            // Reconstruct rgba string
+            document.documentElement.style.setProperty( '--hero-overlay', 'rgba(0,0,0, ' + newval + ')' );
         } );
     } );
 
-    // Contact Heading
+    updateVar( 'hero_alignment', '--hero-align' );
+    wp.customize( 'hero_alignment', function( value ) {
+        value.bind( function( newval ) {
+            // Also need to update flex-align for vertical alignment if needed, 
+            // but for now text-align handles most, and we use flex-start/end in CSS logic.
+            // However, JS update needs to mirror PHP logic for 'align-items'
+            var align = 'center';
+            if ( newval === 'left' ) align = 'flex-start';
+            if ( newval === 'right' ) align = 'flex-end';
+            $( '.hero-content' ).css( 'align-items', align );
+        } );
+    } );
+
+    updateVar( 'hero_title_size', '--hero-title-size', 'rem' );
+
+
+    // Hero Content (Selective Refresh handled by PHP partials, but we can do text updates too)
+    wp.customize( 'hero_headline', function( value ) {
+        value.bind( function( newval ) {
+            $( '.hero-title' ).text( newval );
+        } );
+    } );
+
+    wp.customize( 'hero_subtext', function( value ) {
+        value.bind( function( newval ) {
+            $( '.hero-subtitle' ).text( newval );
+        } );
+    } );
+
+    wp.customize( 'hero_cta_text', function( value ) {
+        value.bind( function( newval ) {
+            $( '.hero-content .btn' ).text( newval );
+        } );
+    } );
+
+    // Contact Info (Selective Refresh mostly, but text updates for instant feel)
     wp.customize( 'contact_heading', function( value ) {
         value.bind( function( newval ) {
             $( '.contact-headline' ).text( newval );
-        } );
-    } );
-
-    // Contact Info (Footer/Contact Section)
-    wp.customize( 'contact_email', function( value ) {
-        value.bind( function( newval ) {
-            $( '.contact-email' ).text( newval );
-            $( '.contact-email-link' ).attr( 'href', 'mailto:' + newval );
-        } );
-    } );
-
-    wp.customize( 'contact_phone', function( value ) {
-        value.bind( function( newval ) {
-            $( '.contact-phone' ).text( newval );
-            $( '.contact-phone-link' ).attr( 'href', 'tel:' + newval.replace(/[^\d+]/g, '') );
-        } );
-    } );
-
-    wp.customize( 'contact_address', function( value ) {
-        value.bind( function( newval ) {
-            $( '.contact-address' ).text( newval );
-        } );
-    } );
-
-    // --- LIVE COLOR PREVIEW ---
-    
-    // Background Color
-    wp.customize( 'color_bg', function( value ) {
-        value.bind( function( newval ) {
-            document.documentElement.style.setProperty( '--color-bg', newval );
-        } );
-    } );
-
-    // Text Color
-    wp.customize( 'color_text', function( value ) {
-        value.bind( function( newval ) {
-            document.documentElement.style.setProperty( '--color-text', newval );
-        } );
-    } );
-
-    // Accent Color
-    wp.customize( 'color_accent', function( value ) {
-        value.bind( function( newval ) {
-            document.documentElement.style.setProperty( '--color-accent', newval );
         } );
     } );
 
