@@ -8,7 +8,9 @@
 
 <section id="contact" class="section-contact">
 	<div class="container">
-		<h2>Contact</h2>
-		<p>Placeholder for Contact content.</p>
+		<div class="contact-box">
+			<h2 class="contact-headline">Work with Laytoncorp.</h2>
+			<a href="mailto:hello@laytoncorp.com" class="btn">Get in touch</a>
+		</div>
 	</div>
 </section>

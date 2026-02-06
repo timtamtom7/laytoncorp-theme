@@ -4,11 +4,20 @@
  *
  * @package Laytoncorp
  */
+
+$headline = "What Laytoncorp does.";
+$content = "Laytoncorp operates at the intersection of materials, manufacturing, and technology. We build, acquire, and scale companies that shape the physical world.";
 ?>
 
 <section id="about" class="section-about">
 	<div class="container">
-		<h2>About Us</h2>
-		<p>Placeholder for About content.</p>
+		<div class="about-grid">
+			<div class="about-column-left">
+				<h2 class="about-headline"><?php echo esc_html( $headline ); ?></h2>
+			</div>
+			<div class="about-column-right">
+				<p class="about-text"><?php echo esc_html( $content ); ?></p>
+			</div>
+		</div>
 	</div>
 </section>
