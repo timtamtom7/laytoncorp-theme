@@ -5,39 +5,43 @@
  * @package Laytoncorp
  */
 
-// Fallback data
-$brands = array(
+// Fallback data structure matches ACF structure
+$fallback_brands = array(
 	array(
-		'name'  => 'Moochu',
-		'image' => get_template_directory_uri() . '/assets/images/brand-moochu.jpg',
+		'brand_name' => 'Moochu',
+		'brand_logo' => get_template_directory_uri() . '/assets/images/brand-moochu.jpg',
 	),
 	array(
-		'name'  => 'Pureply',
-		'image' => get_template_directory_uri() . '/assets/images/brand-pureply.jpg',
+		'brand_name' => 'Pureply',
+		'brand_logo' => get_template_directory_uri() . '/assets/images/brand-pureply.jpg',
 	),
 	array(
-		'name'  => 'Softply',
-		'image' => get_template_directory_uri() . '/assets/images/brand-softply.jpg',
+		'brand_name' => 'Softply',
+		'brand_logo' => get_template_directory_uri() . '/assets/images/brand-softply.jpg',
 	),
 	array(
-		'name'  => 'Maxee',
-		'image' => get_template_directory_uri() . '/assets/images/brand-maxee.jpg',
+		'brand_name' => 'Maxee',
+		'brand_logo' => get_template_directory_uri() . '/assets/images/brand-maxee.jpg',
 	),
 	array(
-		'name'  => 'TEMPUR',
-		'image' => get_template_directory_uri() . '/assets/images/brand-tempur.jpg',
+		'brand_name' => 'TEMPUR',
+		'brand_logo' => get_template_directory_uri() . '/assets/images/brand-tempur.jpg',
 	),
 	array(
-		'name'  => 'Layton Health',
-		'image' => get_template_directory_uri() . '/assets/images/brand-layton-health.jpg',
+		'brand_name' => 'Layton Health',
+		'brand_logo' => get_template_directory_uri() . '/assets/images/brand-layton-health.jpg',
 	),
 	array(
-		'name'  => 'Environmental Material Technology',
-		'image' => get_template_directory_uri() . '/assets/images/brand-emt.jpg',
+		'brand_name' => 'Environmental Material Technology',
+		'brand_logo' => get_template_directory_uri() . '/assets/images/brand-emt.jpg',
 	),
 );
 
-$acf_brands = get_field('portfolio_brands');
+$brands = lc_field( 'portfolio_brands', $fallback_brands );
+
+if ( empty( $brands ) ) {
+	$brands = $fallback_brands;
+}
 ?>
 
 <section id="portfolio" class="section-portfolio">
@@ -45,29 +49,20 @@ $acf_brands = get_field('portfolio_brands');
 		<h2 class="section-title">Portfolio</h2>
 		
 		<div class="portfolio-grid">
-			<?php 
-			if ( $acf_brands ) : 
-				foreach ( $acf_brands as $brand ) : 
-					$image = $brand['brand_logo'] ?: get_template_directory_uri() . '/assets/images/placeholder-brand.jpg'; // Basic fallback for empty image
+			<?php foreach ( $brands as $brand ) : 
+				$name  = isset($brand['brand_name']) ? $brand['brand_name'] : '';
+				$image = isset($brand['brand_logo']) ? $brand['brand_logo'] : '';
+				
+				// Use placeholder if image is missing but name exists
+				if ( ! $image ) {
+					$image = get_template_directory_uri() . '/assets/images/placeholder-brand.jpg';
+				}
 			?>
 				<div class="brand-card">
-					<img src="<?php echo esc_url( $image ); ?>" alt="<?php echo esc_attr( $brand['brand_name'] ); ?>" class="brand-logo">
-					<h3 class="brand-name"><?php echo esc_html( $brand['brand_name'] ); ?></h3>
+					<img src="<?php echo esc_url( $image ); ?>" alt="<?php echo esc_attr( $name ); ?>" class="brand-logo">
+					<h3 class="brand-name"><?php echo esc_html( $name ); ?></h3>
 				</div>
-			<?php 
-				endforeach;
-			else :
-				// Fallback loop
-				foreach ( $brands as $brand ) : 
-			?>
-				<div class="brand-card">
-					<img src="<?php echo esc_url( $brand['image'] ); ?>" alt="<?php echo esc_attr( $brand['name'] ); ?>" class="brand-logo">
-					<h3 class="brand-name"><?php echo esc_html( $brand['name'] ); ?></h3>
-				</div>
-			<?php 
-				endforeach;
-			endif; 
-			?>
+			<?php endforeach; ?>
 		</div>
 	</div>
 </section>

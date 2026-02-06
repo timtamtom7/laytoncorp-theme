@@ -5,8 +5,8 @@
  * @package Laytoncorp
  */
 
-$heading = get_field( 'contact_heading' ) ?: 'Work with Laytoncorp.';
-$btn_text = get_field( 'contact_button_text' ) ?: 'Get in touch';
+$heading  = lc_field( 'contact_heading', 'Work with Laytoncorp.' );
+$btn_text = lc_field( 'contact_button_text', 'Get in touch' );
 ?>
 
 <section id="contact" class="section-contact">

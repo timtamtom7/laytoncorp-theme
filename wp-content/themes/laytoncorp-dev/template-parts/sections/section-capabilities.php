@@ -6,14 +6,20 @@
  */
 
 $fallback_capabilities = array(
-	'Materials Innovation',
-	'Manufacturing & Scale',
-	'Supply Chain Design',
-	'Sustainability Engineering',
-	'Brand Operations',
+	array('capability_label' => 'Materials Innovation'),
+	array('capability_label' => 'Manufacturing & Scale'),
+	array('capability_label' => 'Supply Chain Design'),
+	array('capability_label' => 'Sustainability Engineering'),
+	array('capability_label' => 'Brand Operations'),
 );
 
-$acf_capabilities = get_field('capabilities');
+// Get ACF field or use fallback array structure
+$capabilities = lc_field( 'capabilities', $fallback_capabilities );
+
+// Ensure we have an array (in case ACF returns false/null despite helper logic, though helper usually handles default)
+if ( empty( $capabilities ) ) {
+	$capabilities = $fallback_capabilities;
+}
 ?>
 
 <section id="capabilities" class="section-capabilities">
@@ -21,28 +27,15 @@ $acf_capabilities = get_field('capabilities');
 		<h2 class="section-title">Capabilities</h2>
 		
 		<div class="capabilities-list">
-			<?php 
-			if ( $acf_capabilities ) :
-				foreach ( $acf_capabilities as $cap ) :
-					if ( empty( $cap['capability_label'] ) ) continue;
+			<?php foreach ( $capabilities as $cap ) : 
+				$label = isset($cap['capability_label']) ? $cap['capability_label'] : '';
+				if ( ! $label ) continue;
 			?>
 				<div class="capability-item">
-					<span class="capability-name"><?php echo esc_html( $cap['capability_label'] ); ?></span>
+					<span class="capability-name"><?php echo esc_html( $label ); ?></span>
 					<span class="capability-icon">&rarr;</span>
 				</div>
-			<?php 
-				endforeach;
-			else :
-				foreach ( $fallback_capabilities as $capability ) : 
-			?>
-				<div class="capability-item">
-					<span class="capability-name"><?php echo esc_html( $capability ); ?></span>
-					<span class="capability-icon">&rarr;</span>
-				</div>
-			<?php 
-				endforeach;
-			endif;
-			?>
+			<?php endforeach; ?>
 		</div>
 	</div>
 </section>

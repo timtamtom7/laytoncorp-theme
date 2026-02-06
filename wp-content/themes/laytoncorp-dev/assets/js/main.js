@@ -15,18 +15,6 @@
 		}
 	};
 
-	// Helper: Add Event Listener
-	const on = (type, el, listener, all = false) => {
-		let selectEl = select(el, all);
-		if (selectEl) {
-			if (all) {
-				selectEl.forEach(e => e.addEventListener(type, listener));
-			} else {
-				selectEl.addEventListener(type, listener);
-			}
-		}
-	};
-
 	/**
 	 * Intersection Observer for Section Fade-in
 	 */
@@ -57,15 +45,16 @@
 	const handleHeaderScroll = () => {
 		const header = select('.site-header');
 		if (header) {
-			const headerHeight = header.offsetHeight;
 			const onScroll = () => {
-				if (window.scrollY > 100) {
+				if (window.scrollY > 50) {
 					header.classList.add('is-scrolled');
 				} else {
 					header.classList.remove('is-scrolled');
 				}
 			};
 			window.addEventListener('scroll', onScroll);
+			// Check initial state
+			onScroll();
 		}
 	};
 
@@ -73,21 +62,39 @@
 	 * Hero Slideshow Logic
 	 */
 	const initSlideshow = () => {
+		const slideshowContainer = select('.hero-slideshow');
 		const slides = select('.hero-slide', true);
-		if (slides.length > 0) {
+		
+		if (slides.length > 1) {
 			let currentSlide = 0;
-			const slideInterval = 6000; // 6 seconds
+			const slideIntervalTime = 6000; // 6 seconds
+			let slideInterval;
+			let isPaused = false;
 
 			// Set initial state
 			slides[0].classList.add('active');
 
 			const nextSlide = () => {
+				if (isPaused) return;
+				
 				slides[currentSlide].classList.remove('active');
 				currentSlide = (currentSlide + 1) % slides.length;
 				slides[currentSlide].classList.add('active');
 			};
 
-			setInterval(nextSlide, slideInterval);
+			// Start interval
+			slideInterval = setInterval(nextSlide, slideIntervalTime);
+
+			// Pause on hover
+			if (slideshowContainer) {
+				slideshowContainer.addEventListener('mouseenter', () => {
+					isPaused = true;
+				});
+
+				slideshowContainer.addEventListener('mouseleave', () => {
+					isPaused = false;
+				});
+			}
 		}
 	};
 
@@ -98,7 +105,6 @@
 		observeSections();
 		handleHeaderScroll();
 		initSlideshow();
-		console.log('Laytoncorp theme initialized.');
 	});
 
 })();

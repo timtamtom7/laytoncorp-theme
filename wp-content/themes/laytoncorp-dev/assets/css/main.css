@@ -13,6 +13,8 @@
 	--color-border: #eeeeee;
 	--color-overlay: rgba(0, 0, 0, 0.3);
 	--color-white: #ffffff;
+	--color-bg-alt: #f5f5f5;
+	--color-bg-dark: #111111;
 
 	/* Typography */
 	--font-primary: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
@@ -62,7 +64,7 @@ h1, h2, h3, h4, h5, h6 {
 	line-height: 1.1;
 	margin-top: 0;
 	margin-bottom: var(--space-2);
-	letter-spacing: -0.02em;
+	letter-spacing: -0.03em; /* Tighter letter-spacing */
 }
 
 p {
@@ -114,25 +116,32 @@ a:hover {
 	width: 100%;
 	z-index: 100;
 	background: transparent;
-	transition: background-color 0.3s ease;
+	transition: background-color 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease;
 }
 
 .site-header.is-scrolled {
-	background-color: rgba(255, 255, 255, 0.95);
+	background-color: rgba(255, 255, 255, 0.98);
 	position: fixed;
 	border-bottom: 1px solid var(--color-border);
 	padding: var(--space-2) 0;
+	box-shadow: 0 4px 20px rgba(0,0,0,0.03);
 }
 
-.site-branding .site-title {
+.header-container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.site-logo {
 	font-size: 1.25rem;
 	font-weight: 700;
 	text-transform: uppercase;
 	letter-spacing: 0.05em;
-	margin: 0;
+	color: var(--color-text);
 }
 
-.main-navigation ul {
+.nav-menu {
 	list-style: none;
 	margin: 0;
 	padding: 0;
@@ -140,10 +149,12 @@ a:hover {
 	gap: var(--space-4);
 }
 
-.site-header .container {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
+.nav-menu li a {
+	font-size: 0.9375rem;
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: var(--color-text);
 }
 
 /* Hero System */
@@ -157,6 +168,7 @@ a:hover {
 	overflow: hidden;
 	color: var(--color-white);
 	background-color: var(--color-accent); /* Fallback */
+	padding: var(--space-8) 0; /* Consistent padding */
 }
 
 /* Mode A: Image & Mode B: Video */
@@ -182,7 +194,8 @@ a:hover {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6));
+	/* Soft gradient overlay */
+	background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.5));
 	z-index: 2;
 }
 
@@ -190,19 +203,24 @@ a:hover {
 	position: relative;
 	z-index: 3;
 	text-align: center;
-	max-width: 800px;
+	max-width: min(90vw, 1200px); /* Max width constraint */
 	padding: 0 var(--space-4);
 }
 
 .hero-title {
-	font-size: 3rem;
+	font-size: clamp(2.5rem, 5vw, 4.5rem); /* Responsive typography */
 	margin-bottom: var(--space-3);
+	font-weight: 700;
+	line-height: 1.05;
 }
 
 .hero-subtitle {
-	font-size: 1.25rem;
+	font-size: clamp(1.125rem, 2vw, 1.5rem);
 	margin-bottom: var(--space-4);
 	opacity: 0.9;
+	max-width: 800px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 /* Mode C: Typography */
@@ -212,9 +230,9 @@ a:hover {
 }
 
 .hero-mode-typography .hero-title {
-	font-size: 5rem;
-	line-height: 1;
-	letter-spacing: -0.04em;
+	font-size: clamp(3rem, 10vw, 8rem);
+	line-height: 0.95;
+	letter-spacing: -0.05em;
 	color: var(--color-text);
 	position: relative;
 	display: inline-block;
@@ -252,7 +270,7 @@ a:hover {
 	width: 100%;
 	height: 100%;
 	opacity: 0;
-	transition: opacity 1s ease-in-out;
+	transition: opacity 800ms ease-in-out; /* Crossfade 800ms */
 }
 
 .hero-slide.active {
@@ -283,6 +301,7 @@ a:hover {
 
 .marquee-track {
 	display: inline-flex;
+	/* animation handled in JS or below, but JS preferred for pause control if complexity increases */
 	animation: marquee 40s linear infinite;
 }
 
@@ -291,8 +310,8 @@ a:hover {
 }
 
 .marquee-item {
-	width: 400px;
-	height: 300px;
+	width: clamp(250px, 30vw, 500px); /* Responsive width */
+	aspect-ratio: 4/3;
 	margin-right: var(--space-4);
 	flex-shrink: 0;
 	background-color: #f0f0f0;
@@ -310,8 +329,8 @@ a:hover {
 }
 
 /* Sections General */
-section {
-	padding: var(--space-12) 0;
+section:not(.hero-section) {
+	padding: clamp(64px, 8vw, 120px) 0; /* Standard section padding */
 	opacity: 0;
 	transform: translateY(20px);
 	transition: opacity 0.8s ease, transform 0.8s ease;
@@ -366,16 +385,19 @@ section.is-visible {
 	align-items: center;
 	justify-content: center;
 	min-height: 300px;
+	aspect-ratio: 1/1; /* Consistent square aspect ratio */
 }
 
 .brand-card:hover {
-	transform: translateY(-5px);
-	box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+	transform: translateY(-8px); /* Subtle lift */
+	box-shadow: 0 15px 40px rgba(0,0,0,0.08);
 	background-color: #fff;
 }
 
 .brand-logo {
 	max-width: 150px;
+	max-height: 80px;
+	width: auto;
 	margin-bottom: var(--space-3);
 	filter: grayscale(100%);
 	transition: filter 0.3s ease;
@@ -386,8 +408,10 @@ section.is-visible {
 }
 
 .brand-name {
-	font-weight: 600;
-	font-size: 1.125rem;
+	font-weight: 500; /* Minimal */
+	font-size: 1rem;
+	letter-spacing: 0.02em;
+	margin-top: auto;
 }
 
 /* Section: Capabilities */
@@ -402,7 +426,7 @@ section.is-visible {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	transition: padding-left 0.3s ease;
+	transition: padding-left 0.3s ease, border-color 0.3s ease;
 }
 
 .capability-item:hover {
@@ -417,7 +441,8 @@ section.is-visible {
 
 /* Section: Contact */
 .section-contact {
-	background-color: #f5f5f5;
+	background-color: var(--color-bg-dark); /* Darker background */
+	color: var(--color-white);
 	text-align: center;
 }
 
@@ -427,8 +452,20 @@ section.is-visible {
 }
 
 .contact-headline {
-	font-size: 3rem;
+	font-size: clamp(2.5rem, 5vw, 3.5rem);
 	margin-bottom: var(--space-4);
+	color: var(--color-white);
+}
+
+.section-contact .btn {
+	background-color: var(--color-white);
+	color: var(--color-text);
+	border-color: var(--color-white);
+}
+
+.section-contact .btn:hover {
+	background-color: transparent;
+	color: var(--color-white);
 }
 
 /* Footer */
@@ -445,22 +482,10 @@ section.is-visible {
 	align-items: center;
 }
 
-.footer-navigation ul {
-	display: flex;
-	gap: var(--space-4);
-	list-style: none;
-	padding: 0;
-	margin: 0;
-}
-
 /* Responsive */
 @media (max-width: 1024px) {
 	.portfolio-grid {
 		grid-template-columns: repeat(2, 1fr);
-	}
-	
-	.hero-title {
-		font-size: 2.5rem;
 	}
 }
 
@@ -481,21 +506,13 @@ section.is-visible {
 		grid-template-columns: 1fr;
 	}
 
-	.hero-title {
-		font-size: 2rem;
-	}
-
-	.hero-mode-typography .hero-title {
-		font-size: 3rem;
-	}
-
 	.footer-content {
 		flex-direction: column;
 		gap: var(--space-4);
 		text-align: center;
 	}
 	
-	.main-navigation {
-		display: none; /* Hide nav on mobile for now - standard hamburger would go here */
+	.nav-menu {
+		display: none; /* Hide standard nav on mobile for now */
 	}
 }

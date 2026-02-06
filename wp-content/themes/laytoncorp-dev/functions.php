@@ -53,13 +53,28 @@ function laytoncorp_scripts() {
 	// Enqueue main stylesheet (style.css).
 	wp_enqueue_style( 'laytoncorp-style', get_stylesheet_uri(), array(), '1.0.0' );
 
-	// Enqueue custom main CSS.
-	wp_enqueue_style( 'laytoncorp-main', get_template_directory_uri() . '/assets/css/main.css', array(), '1.0.0' );
+	// Enqueue custom main CSS with cache busting.
+	$css_file = get_template_directory() . '/assets/css/main.css';
+	$css_ver  = file_exists( $css_file ) ? filemtime( $css_file ) : '1.0.0';
+	wp_enqueue_style( 'laytoncorp-main', get_template_directory_uri() . '/assets/css/main.css', array(), $css_ver );
 
-	// Enqueue custom main JS.
-	wp_enqueue_script( 'laytoncorp-main-js', get_template_directory_uri() . '/assets/js/main.js', array(), '1.0.0', true );
+	// Enqueue custom main JS with cache busting.
+	$js_file = get_template_directory() . '/assets/js/main.js';
+	$js_ver  = file_exists( $js_file ) ? filemtime( $js_file ) : '1.0.0';
+	wp_enqueue_script( 'laytoncorp-main-js', get_template_directory_uri() . '/assets/js/main.js', array(), $js_ver, true );
 }
 add_action( 'wp_enqueue_scripts', 'laytoncorp_scripts' );
+
+/**
+ * Helper: Safe ACF Field Retrieval
+ * 
+ * @param string $key     The field name/key.
+ * @param mixed  $default The default value if field is empty or ACF is missing.
+ * @return mixed Field value or default.
+ */
+function lc_field($key, $default = '') {
+	return function_exists('get_field') ? (get_field($key) ?: $default) : $default;
+}
 
 /**
  * Register ACF Fields Programmatically
@@ -82,9 +97,10 @@ acf_add_local_field_group(array(
 		),
 		array(
 			'key' => 'field_hero_mode',
-			'label' => 'Hero Mode Selector',
+			'label' => 'Hero display mode',
 			'name' => 'hero_mode',
 			'type' => 'radio',
+			'instructions' => 'Select the visual style for the homepage hero section.',
 			'choices' => array(
 				'image' => 'Image Hero',
 				'video' => 'Video Hero',
@@ -97,14 +113,14 @@ acf_add_local_field_group(array(
 		),
 		array(
 			'key' => 'field_hero_headline',
-			'label' => 'Headline',
+			'label' => 'Hero headline (large)',
 			'name' => 'hero_headline',
 			'type' => 'text',
 			'default_value' => 'Laytoncorp builds what matters.',
 		),
 		array(
 			'key' => 'field_hero_subtext',
-			'label' => 'Subtext',
+			'label' => 'Hero subtext',
 			'name' => 'hero_subtext',
 			'type' => 'textarea',
 			'default_value' => 'Infrastructure, innovation, and materials for a changing world.',
@@ -112,7 +128,7 @@ acf_add_local_field_group(array(
 		),
 		array(
 			'key' => 'field_hero_cta_text',
-			'label' => 'Primary CTA Text',
+			'label' => 'Primary button text',
 			'name' => 'hero_cta_text',
 			'type' => 'text',
 			'default_value' => 'Get in touch',
@@ -124,6 +140,7 @@ acf_add_local_field_group(array(
 			'name' => 'hero_image',
 			'type' => 'image',
 			'return_format' => 'url',
+			'instructions' => 'High-resolution image for the "Image Hero" mode.',
 			'conditional_logic' => array(
 				array(
 					array(
@@ -142,6 +159,7 @@ acf_add_local_field_group(array(
 			'type' => 'file',
 			'return_format' => 'url',
 			'mime_types' => 'mp4',
+			'instructions' => 'Upload an MP4 video file. Keep file size optimized for web.',
 			'conditional_logic' => array(
 				array(
 					array(
@@ -158,6 +176,7 @@ acf_add_local_field_group(array(
 			'name' => 'hero_video_poster',
 			'type' => 'image',
 			'return_format' => 'url',
+			'instructions' => 'Displayed while the video loads and on mobile devices where autoplay might be disabled.',
 			'conditional_logic' => array(
 				array(
 					array(
@@ -175,6 +194,7 @@ acf_add_local_field_group(array(
 			'name' => 'hero_slides',
 			'type' => 'repeater',
 			'layout' => 'block',
+			'instructions' => 'Add slides for the "Slideshow Carousel" mode.',
 			'sub_fields' => array(
 				array(
 					'key' => 'field_slide_image',
@@ -207,6 +227,7 @@ acf_add_local_field_group(array(
 			'name' => 'hero_marquee_images',
 			'type' => 'repeater',
 			'layout' => 'table',
+			'instructions' => 'Add images for the continuous scrolling marquee.',
 			'sub_fields' => array(
 				array(
 					'key' => 'field_marquee_image',
@@ -259,10 +280,11 @@ acf_add_local_field_group(array(
 		),
 		array(
 			'key' => 'field_portfolio_brands',
-			'label' => 'Portfolio Brands',
+			'label' => 'Homepage brands',
 			'name' => 'portfolio_brands',
 			'type' => 'repeater',
 			'layout' => 'block',
+			'instructions' => 'Add the brands to be featured in the portfolio grid.',
 			'sub_fields' => array(
 				array(
 					'key' => 'field_brand_name',
@@ -307,10 +329,11 @@ acf_add_local_field_group(array(
 		),
 		array(
 			'key' => 'field_capabilities',
-			'label' => 'Capabilities List',
+			'label' => 'Core capabilities',
 			'name' => 'capabilities',
 			'type' => 'repeater',
 			'layout' => 'table',
+			'instructions' => 'List the core capabilities of the company.',
 			'sub_fields' => array(
 				array(
 					'key' => 'field_capability_label',

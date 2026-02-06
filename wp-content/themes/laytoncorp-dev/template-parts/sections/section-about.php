@@ -5,8 +5,8 @@
  * @package Laytoncorp
  */
 
-$headline = get_field( 'about_heading' ) ?: "What Laytoncorp does.";
-$content = get_field( 'about_body' ) ?: "Laytoncorp operates at the intersection of materials, manufacturing, and technology. We build, acquire, and scale companies that shape the physical world.";
+$headline = lc_field( 'about_heading', "What Laytoncorp does." );
+$content  = lc_field( 'about_body', "Laytoncorp operates at the intersection of materials, manufacturing, and technology. We build, acquire, and scale companies that shape the physical world." );
 ?>
 
 <section id="about" class="section-about">

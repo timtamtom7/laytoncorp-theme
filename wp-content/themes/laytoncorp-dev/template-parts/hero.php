@@ -7,12 +7,12 @@
  * @package Laytoncorp
  */
 
-// ACF Fields with Fallbacks
-$hero_mode    = get_field( 'hero_mode' ) ?: 'image';
-$headline     = get_field( 'hero_headline' ) ?: 'Laytoncorp builds what matters.';
-$subheadline  = get_field( 'hero_subtext' ) ?: 'Infrastructure, innovation, and materials for a changing world.';
-$cta_text     = get_field( 'hero_cta_text' ) ?: 'Get in touch';
-$cta_link     = '#contact'; // Could be dynamic too, but sticking to design brief
+// ACF Fields with Fallbacks using lc_field helper
+$hero_mode    = lc_field( 'hero_mode', 'image' );
+$headline     = lc_field( 'hero_headline', 'Laytoncorp builds what matters.' );
+$subheadline  = lc_field( 'hero_subtext', 'Infrastructure, innovation, and materials for a changing world.' );
+$cta_text     = lc_field( 'hero_cta_text', 'Get in touch' );
+$cta_link     = '#contact'; // Anchored to contact section
 
 // Media Fallbacks
 $default_poster = get_template_directory_uri() . '/assets/images/hero-poster.jpg';
@@ -23,7 +23,7 @@ $default_slide  = get_template_directory_uri() . '/assets/images/hero-slide-1.jp
 <section id="hero" class="hero-section hero-mode-<?php echo esc_attr( $hero_mode ); ?>">
 
 	<?php if ( 'image' === $hero_mode ) : 
-		$image_url = get_field( 'hero_image' ) ?: $default_slide;
+		$image_url = lc_field( 'hero_image', $default_slide );
 	?>
 		
 		<div class="hero-background">
@@ -40,8 +40,8 @@ $default_slide  = get_template_directory_uri() . '/assets/images/hero-slide-1.jp
 		</div>
 
 	<?php elseif ( 'video' === $hero_mode ) : 
-		$video_url = get_field( 'hero_video_mp4' ) ?: get_template_directory_uri() . '/assets/videos/hero-loop.mp4';
-		$poster_url = get_field( 'hero_video_poster' ) ?: $default_poster;
+		$video_url = lc_field( 'hero_video_mp4', get_template_directory_uri() . '/assets/videos/hero-loop.mp4' );
+		$poster_url = lc_field( 'hero_video_poster', $default_poster );
 	?>
 
 		<div class="hero-background">
@@ -68,7 +68,7 @@ $default_slide  = get_template_directory_uri() . '/assets/images/hero-slide-1.jp
 		</div>
 
 	<?php elseif ( 'slideshow' === $hero_mode ) : 
-		$slides = get_field( 'hero_slides' );
+		$slides = lc_field( 'hero_slides' );
 		if ( empty( $slides ) ) {
 			// Fallback slides
 			$slides = array(
@@ -82,9 +82,11 @@ $default_slide  = get_template_directory_uri() . '/assets/images/hero-slide-1.jp
 		<div class="hero-slideshow">
 			<?php foreach ( $slides as $index => $slide ) : 
 				$active_class = ( 0 === $index ) ? 'active' : '';
+				$img_src = isset($slide['slide_image']) ? $slide['slide_image'] : '';
+				if ( ! $img_src ) continue;
 			?>
 				<div class="hero-slide <?php echo esc_attr( $active_class ); ?>">
-					<img src="<?php echo esc_url( $slide['slide_image'] ); ?>" alt="Slide <?php echo esc_attr( $index + 1 ); ?>">
+					<img src="<?php echo esc_url( $img_src ); ?>" alt="Slide <?php echo esc_attr( $index + 1 ); ?>">
 				</div>
 			<?php endforeach; ?>
 		</div>
@@ -99,7 +101,7 @@ $default_slide  = get_template_directory_uri() . '/assets/images/hero-slide-1.jp
 		</div>
 
 	<?php elseif ( 'marquee' === $hero_mode ) : 
-		$marquee_images = get_field( 'hero_marquee_images' );
+		$marquee_images = lc_field( 'hero_marquee_images' );
 		if ( empty( $marquee_images ) ) {
 			// Fallback images
 			$marquee_images = array();
@@ -112,10 +114,13 @@ $default_slide  = get_template_directory_uri() . '/assets/images/hero-slide-1.jp
 		<div class="marquee-container">
 			<div class="marquee-track">
 				<!-- Duplicate set for seamless loop -->
-				<?php for ( $i = 0; $i < 2; $i++ ) : ?>
-					<?php foreach ( $marquee_images as $item ) : ?>
+				<?php for ( $i = 0; $i < 4; $i++ ) : // Increased duplication for wider screens/seamless loop ?>
+					<?php foreach ( $marquee_images as $item ) : 
+						$img_src = isset($item['marquee_image']) ? $item['marquee_image'] : '';
+						if ( ! $img_src ) continue;
+					?>
 						<div class="marquee-item">
-							<img src="<?php echo esc_url( $item['marquee_image'] ); ?>" alt="Marquee Image">
+							<img src="<?php echo esc_url( $img_src ); ?>" alt="Marquee Image">
 						</div>
 					<?php endforeach; ?>
 				<?php endfor; ?>
