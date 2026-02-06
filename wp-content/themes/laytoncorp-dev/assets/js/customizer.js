@@ -54,10 +54,9 @@
     // --- HERO SECTION ---
     
     // Hero Layout & Style
-    updateVar( 'hero_overlay_opacity', '--hero-overlay', '' ); // Needs special handling for rgba
+    updateVar( 'hero_overlay_opacity', '--hero-overlay', '' ); 
     wp.customize( 'hero_overlay_opacity', function( value ) {
         value.bind( function( newval ) {
-            // Reconstruct rgba string
             document.documentElement.style.setProperty( '--hero-overlay', 'rgba(0,0,0, ' + newval + ')' );
         } );
     } );
@@ -65,9 +64,6 @@
     updateVar( 'hero_alignment', '--hero-align' );
     wp.customize( 'hero_alignment', function( value ) {
         value.bind( function( newval ) {
-            // Also need to update flex-align for vertical alignment if needed, 
-            // but for now text-align handles most, and we use flex-start/end in CSS logic.
-            // However, JS update needs to mirror PHP logic for 'align-items'
             var align = 'center';
             if ( newval === 'left' ) align = 'flex-start';
             if ( newval === 'right' ) align = 'flex-end';
@@ -77,8 +73,7 @@
 
     updateVar( 'hero_title_size', '--hero-title-size', 'rem' );
 
-
-    // Hero Content (Selective Refresh handled by PHP partials, but we can do text updates too)
+    // Hero Content
     wp.customize( 'hero_headline', function( value ) {
         value.bind( function( newval ) {
             $( '.hero-title' ).text( newval );
@@ -97,11 +92,65 @@
         } );
     } );
 
-    // Contact Info (Selective Refresh mostly, but text updates for instant feel)
+    // Contact Info
     wp.customize( 'contact_heading', function( value ) {
         value.bind( function( newval ) {
             $( '.contact-headline' ).text( newval );
         } );
     } );
+
+
+    // --- FEATURES SECTION (New) ---
+    wp.customize( 'features_title', function( value ) {
+        value.bind( function( newval ) {
+            $( '#capabilities .section-title' ).text( newval );
+        } );
+    } );
+
+    for ( let i = 1; i <= 4; i++ ) {
+        wp.customize( 'feature_' + i + '_title', function( value ) {
+            value.bind( function( newval ) {
+                $( '.feature-card-' + i + ' .feature-title' ).text( newval );
+            } );
+        } );
+        wp.customize( 'feature_' + i + '_text', function( value ) {
+            value.bind( function( newval ) {
+                $( '.feature-card-' + i + ' .feature-text' ).text( newval );
+            } );
+        } );
+    }
+
+    // --- PORTFOLIO SECTION (New) ---
+    wp.customize( 'portfolio_title', function( value ) {
+        value.bind( function( newval ) {
+            $( '#portfolio .section-title' ).text( newval );
+        } );
+    } );
+
+    updateVar( 'portfolio_gap', '--grid-gap', 'px' );
+
+    wp.customize( 'portfolio_columns', function( value ) {
+        value.bind( function( newval ) {
+            $( '.portfolio-grid' ).css( 'grid-template-columns', 'repeat(' + newval + ', 1fr)' );
+        } );
+    } );
+
+    // --- ABOUT SECTION (New) ---
+    wp.customize( 'about_heading', function( value ) {
+        value.bind( function( newval ) {
+            $( '.about-headline' ).text( newval );
+        } );
+    } );
+
+    wp.customize( 'about_body', function( value ) {
+        value.bind( function( newval ) {
+            $( '.about-text' ).text( newval );
+        } );
+    } );
+
+    // --- CARD STYLES (New) ---
+    updateVar( 'card_bg_color', '--card-bg' );
+    updateVar( 'card_radius', '--card-radius', 'px' );
+    updateVar( 'card_padding', '--card-padding', 'px' );
 
 } )( jQuery );

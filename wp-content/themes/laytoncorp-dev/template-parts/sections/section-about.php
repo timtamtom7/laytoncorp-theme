@@ -5,15 +5,23 @@
  * @package Laytoncorp
  */
 
-$headline = lc_field( 'about_heading', "What Laytoncorp does." );
-$content  = lc_field( 'about_body', "Laytoncorp operates at the intersection of materials, manufacturing, and technology. We build, acquire, and scale companies that shape the physical world." );
+// Customizer First (for Live Edit), ACF fallback
+$heading = get_theme_mod( 'about_heading' );
+if ( ! $heading ) {
+    $heading = lc_field( 'about_heading', "What Laytoncorp does." );
+}
+
+$content = get_theme_mod( 'about_body' );
+if ( ! $content ) {
+    $content = lc_field( 'about_body', "Laytoncorp operates at the intersection of materials, manufacturing, and technology. We build, acquire, and scale companies that shape the physical world." );
+}
 ?>
 
 <section id="about" class="section-about">
 	<div class="container">
 		<div class="about-grid">
 			<div class="about-column-left">
-				<h2 class="about-headline"><?php echo esc_html( $headline ); ?></h2>
+				<h2 class="about-headline"><?php echo esc_html( $heading ); ?></h2>
 			</div>
 			<div class="about-column-right">
 				<p class="about-text"><?php echo nl2br( esc_html( $content ) ); ?></p>

@@ -195,9 +195,78 @@ section {
 	text-transform: uppercase;
 	letter-spacing: 0.05em;
 	color: var(--color-text);
+/* Portfolio Section */
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--grid-gap, 24px); /* Fallback to 24px */
 }
 
-/* Mobile Menu Toggle */
+/* Responsive adjustments for Portfolio are handled via Media Queries or Grid Auto-Fit, 
+   but since we want explicit column control, we use the variable or inline style. 
+   The inline style from customizer.php will override this grid-template-columns. 
+*/
+
+@media (max-width: 768px) {
+    .portfolio-grid {
+        grid-template-columns: repeat(2, 1fr) !important; /* Force 2 cols on tablet */
+    }
+}
+
+@media (max-width: 480px) {
+    .portfolio-grid {
+        grid-template-columns: 1fr !important; /* Force 1 col on mobile */
+    }
+}
+
+.section-capabilities {
+    padding: var(--section-spacing) 0;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-6);
+}
+
+.feature-card {
+    background-color: var(--card-bg);
+    padding: var(--card-padding);
+    border-radius: var(--card-radius);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.feature-image-wrapper {
+    margin-bottom: var(--space-3);
+    overflow: hidden;
+    border-radius: calc(var(--card-radius) / 1.5);
+}
+
+.feature-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    max-height: 200px; /* Prevent overly tall images */
+}
+
+.feature-title {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-2);
+    font-weight: 600;
+}
+
+.feature-text {
+    color: var(--color-text-light);
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
 .menu-toggle {
 	display: none;
 	background: transparent;

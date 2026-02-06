@@ -5,6 +5,8 @@
  * @package Laytoncorp
  */
 
+$title = get_theme_mod( 'portfolio_title', 'Portfolio' );
+
 // Fallback data structure matches ACF structure
 $fallback_brands = array(
 	array(
@@ -46,7 +48,7 @@ if ( empty( $brands ) ) {
 
 <section id="portfolio" class="section-portfolio">
 	<div class="container">
-		<h2 class="section-title">Portfolio</h2>
+		<h2 class="section-title"><?php echo esc_html( $title ); ?></h2>
 		
 		<div class="portfolio-grid">
 			<?php foreach ( $brands as $brand ) : 
