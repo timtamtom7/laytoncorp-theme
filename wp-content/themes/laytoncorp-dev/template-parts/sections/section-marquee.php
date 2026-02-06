@@ -25,7 +25,7 @@ for ( $i = 1; $i <= 6; $i++ ) {
 // Fallback Logos if none are set, just to show something in preview if enabled
 if ( empty( $logos ) && is_customize_preview() ) {
     // Just placeholder logic for preview
-    $logos = array_fill( 0, 6, get_template_directory_uri() . '/assets/images/logo-placeholder.png' ); 
+    $logos = array_fill( 0, 6, get_template_directory_uri() . '/assets/images/placeholder-brand.jpg' ); 
 }
 
 if ( empty( $logos ) ) {

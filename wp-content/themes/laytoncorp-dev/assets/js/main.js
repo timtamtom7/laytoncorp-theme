@@ -99,6 +99,24 @@
 	};
 
 	/**
+	 * Mobile Menu
+	 */
+	const initMobileMenu = () => {
+		const menuToggle = select('.menu-toggle');
+		const siteNav = select('#site-navigation');
+		const body = document.body;
+
+		if (menuToggle && siteNav) {
+			menuToggle.addEventListener('click', () => {
+				const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+				menuToggle.setAttribute('aria-expanded', !isExpanded);
+				siteNav.classList.toggle('toggled');
+				body.classList.toggle('menu-open');
+			});
+		}
+	};
+
+	/**
 	 * Init
 	 */
 	window.addEventListener('load', () => {
