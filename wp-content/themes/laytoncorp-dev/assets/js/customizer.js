@@ -29,10 +29,7 @@
             if ( newval ) {
                 if ( $btn.length ) {
                     $btn.text( newval );
-                } else {
-                    // If button doesn't exist, we can't easily append it without knowing the link,
-                    // but usually refresh handles structure changes. This is for text updates.
-                    // Ideally, we trigger a refresh if the element is missing, or we just wait for refresh.
+                    $btn.show();
                 }
             } else {
                 $btn.hide();
@@ -40,7 +37,14 @@
         } );
     } );
 
-    // Contact Info (Footer/Contact Section) - Assuming classes exist or will exist
+    // Contact Heading
+    wp.customize( 'contact_heading', function( value ) {
+        value.bind( function( newval ) {
+            $( '.contact-headline' ).text( newval );
+        } );
+    } );
+
+    // Contact Info (Footer/Contact Section)
     wp.customize( 'contact_email', function( value ) {
         value.bind( function( newval ) {
             $( '.contact-email' ).text( newval );
@@ -58,6 +62,29 @@
     wp.customize( 'contact_address', function( value ) {
         value.bind( function( newval ) {
             $( '.contact-address' ).text( newval );
+        } );
+    } );
+
+    // --- LIVE COLOR PREVIEW ---
+    
+    // Background Color
+    wp.customize( 'color_bg', function( value ) {
+        value.bind( function( newval ) {
+            document.documentElement.style.setProperty( '--color-bg', newval );
+        } );
+    } );
+
+    // Text Color
+    wp.customize( 'color_text', function( value ) {
+        value.bind( function( newval ) {
+            document.documentElement.style.setProperty( '--color-text', newval );
+        } );
+    } );
+
+    // Accent Color
+    wp.customize( 'color_accent', function( value ) {
+        value.bind( function( newval ) {
+            document.documentElement.style.setProperty( '--color-accent', newval );
         } );
     } );
 

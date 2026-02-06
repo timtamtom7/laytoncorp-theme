@@ -6,7 +6,12 @@
  */
 
 function laytoncorp_customize_register( $wp_customize ) {
-	// Add Hero Section
+
+    // --- PANELS (Organization) ---
+    // Note: Panels group sections. We can use existing ones or create new ones.
+    // For now, we will keep Sections as top level for simplicity unless it gets too crowded.
+
+    // --- HERO SECTION ---
 	$wp_customize->add_section( 'laytoncorp_hero_section', array(
 		'title'       => __( 'Hero Section', 'laytoncorp' ),
 		'priority'    => 30,
@@ -69,6 +74,13 @@ function laytoncorp_customize_register( $wp_customize ) {
 		'type'        => 'text',
 	) );
 
+    // Partial for Hero Headline
+    $wp_customize->selective_refresh->add_partial( 'hero_headline', array(
+        'selector'        => '.hero-title',
+        'render_callback' => function() { return get_theme_mod( 'hero_headline' ); },
+    ) );
+
+
 	// 3. Subtext
 	$wp_customize->add_setting( 'hero_subtext', array(
 		'default'           => 'Infrastructure, innovation, and materials for a changing world.',
@@ -81,6 +93,12 @@ function laytoncorp_customize_register( $wp_customize ) {
 		'section'     => 'laytoncorp_hero_section',
 		'type'        => 'textarea',
 	) );
+
+    // Partial for Hero Subtext
+    $wp_customize->selective_refresh->add_partial( 'hero_subtext', array(
+        'selector'        => '.hero-subtitle',
+        'render_callback' => function() { return get_theme_mod( 'hero_subtext' ); },
+    ) );
 
 	// 4. Hero Image (for Image Mode)
 	$wp_customize->add_setting( 'hero_image', array(
@@ -97,7 +115,7 @@ function laytoncorp_customize_register( $wp_customize ) {
         'active_callback' => 'laytoncorp_is_image_mode',
 	) ) );
 
-    // 5. Video File (for Video Mode) - UPGRADED to Media Control
+    // 5. Video File (for Video Mode)
     $wp_customize->add_setting( 'hero_video_id', array(
         'default'           => '',
         'sanitize_callback' => 'absint',
@@ -125,11 +143,17 @@ function laytoncorp_customize_register( $wp_customize ) {
         'type'        => 'text',
     ) );
 
+    // Partial for CTA Text
+    $wp_customize->selective_refresh->add_partial( 'hero_cta_text', array(
+        'selector'        => '.hero-content .btn',
+        'render_callback' => function() { return get_theme_mod( 'hero_cta_text' ); },
+    ) );
+
     // 7. CTA Link
     $wp_customize->add_setting( 'hero_cta_link', array(
         'default'           => '#contact',
         'sanitize_callback' => 'esc_url_raw',
-        'transport'         => 'refresh', // Link change usually requires refresh or simple logic
+        'transport'         => 'refresh', // Link change usually requires refresh
     ) );
 
     $wp_customize->add_control( 'hero_cta_link', array(
@@ -138,11 +162,70 @@ function laytoncorp_customize_register( $wp_customize ) {
         'type'        => 'text', // URL input
     ) );
 
+    // --- THEME COLORS (New) ---
+    $wp_customize->add_section( 'laytoncorp_colors_section', array(
+        'title'       => __( 'Theme Colors', 'laytoncorp' ),
+        'priority'    => 35,
+        'description' => __( 'Customize the global color palette.', 'laytoncorp' ),
+    ) );
+
+    // Background Color
+    $wp_customize->add_setting( 'color_bg', array(
+        'default'           => '#ffffff',
+        'sanitize_callback' => 'sanitize_hex_color',
+        'transport'         => 'postMessage',
+    ) );
+    $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'color_bg', array(
+        'label'   => __( 'Background Color', 'laytoncorp' ),
+        'section' => 'laytoncorp_colors_section',
+    ) ) );
+
+    // Text Color
+    $wp_customize->add_setting( 'color_text', array(
+        'default'           => '#1a1a1a',
+        'sanitize_callback' => 'sanitize_hex_color',
+        'transport'         => 'postMessage',
+    ) );
+    $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'color_text', array(
+        'label'   => __( 'Text Color', 'laytoncorp' ),
+        'section' => 'laytoncorp_colors_section',
+    ) ) );
+
+    // Accent Color
+    $wp_customize->add_setting( 'color_accent', array(
+        'default'           => '#000000',
+        'sanitize_callback' => 'sanitize_hex_color',
+        'transport'         => 'postMessage',
+    ) );
+    $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'color_accent', array(
+        'label'   => __( 'Accent Color (Buttons/Links)', 'laytoncorp' ),
+        'section' => 'laytoncorp_colors_section',
+    ) ) );
+
+
     // --- CONTACT SECTION (Global Data) ---
     $wp_customize->add_section( 'laytoncorp_contact_section', array(
         'title'       => __( 'Contact Info', 'laytoncorp' ),
         'priority'    => 40,
         'description' => __( 'Manage global contact details used in the footer and contact section.', 'laytoncorp' ),
+    ) );
+
+    // Contact Heading
+    $wp_customize->add_setting( 'contact_heading', array(
+        'default'           => 'Work with Laytoncorp.',
+        'sanitize_callback' => 'sanitize_text_field',
+        'transport'         => 'postMessage',
+    ) );
+    $wp_customize->add_control( 'contact_heading', array(
+        'label'       => __( 'Section Heading', 'laytoncorp' ),
+        'section'     => 'laytoncorp_contact_section',
+        'type'        => 'text',
+    ) );
+    
+    // Partial for Contact Heading
+    $wp_customize->selective_refresh->add_partial( 'contact_heading', array(
+        'selector'        => '.contact-headline',
+        'render_callback' => function() { return get_theme_mod( 'contact_heading' ); },
     ) );
 
     // Email
@@ -157,6 +240,12 @@ function laytoncorp_customize_register( $wp_customize ) {
         'type'        => 'text',
     ) );
 
+    // Partial for Email (Footer)
+    $wp_customize->selective_refresh->add_partial( 'contact_email', array(
+        'selector'        => '.footer-contact .contact-email', 
+        'render_callback' => function() { return get_theme_mod( 'contact_email' ); },
+    ) );
+
     // Phone
     $wp_customize->add_setting( 'contact_phone', array(
         'default'           => '',
@@ -167,6 +256,12 @@ function laytoncorp_customize_register( $wp_customize ) {
         'label'       => __( 'Phone Number', 'laytoncorp' ),
         'section'     => 'laytoncorp_contact_section',
         'type'        => 'text',
+    ) );
+    
+    // Partial for Phone
+    $wp_customize->selective_refresh->add_partial( 'contact_phone', array(
+        'selector'        => '.footer-contact .contact-phone',
+        'render_callback' => function() { return get_theme_mod( 'contact_phone' ); },
     ) );
 
     // Address
@@ -179,6 +274,12 @@ function laytoncorp_customize_register( $wp_customize ) {
         'label'       => __( 'Physical Address', 'laytoncorp' ),
         'section'     => 'laytoncorp_contact_section',
         'type'        => 'textarea',
+    ) );
+
+    // Partial for Address
+    $wp_customize->selective_refresh->add_partial( 'contact_address', array(
+        'selector'        => '.contact-address',
+        'render_callback' => function() { return get_theme_mod( 'contact_address' ); },
     ) );
 
 }
@@ -200,6 +301,26 @@ function laytoncorp_customize_preview_js() {
 	wp_enqueue_script( 'laytoncorp-customizer', get_template_directory_uri() . '/assets/js/customizer.js', array( 'customize-preview', 'jquery' ), '1.0', true );
 }
 add_action( 'customize_preview_init', 'laytoncorp_customize_preview_js' );
+
+/**
+ * Generate Dynamic CSS
+ */
+function laytoncorp_customizer_css() {
+    $bg_color = get_theme_mod( 'color_bg', '#ffffff' );
+    $text_color = get_theme_mod( 'color_text', '#1a1a1a' );
+    $accent_color = get_theme_mod( 'color_accent', '#000000' );
+
+    $custom_css = "
+        :root {
+            --color-bg: {$bg_color};
+            --color-text: {$text_color};
+            --color-accent: {$accent_color};
+        }
+    ";
+    wp_add_inline_style( 'laytoncorp-style', $custom_css );
+}
+add_action( 'wp_enqueue_scripts', 'laytoncorp_customizer_css' );
+
 
 /**
  * Active Callbacks
