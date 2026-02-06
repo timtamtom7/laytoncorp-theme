@@ -5,8 +5,8 @@
  * @package Laytoncorp
  */
 
-$headline = "What Laytoncorp does.";
-$content = "Laytoncorp operates at the intersection of materials, manufacturing, and technology. We build, acquire, and scale companies that shape the physical world.";
+$headline = get_field( 'about_heading' ) ?: "What Laytoncorp does.";
+$content = get_field( 'about_body' ) ?: "Laytoncorp operates at the intersection of materials, manufacturing, and technology. We build, acquire, and scale companies that shape the physical world.";
 ?>
 
 <section id="about" class="section-about">
@@ -16,7 +16,7 @@ $content = "Laytoncorp operates at the intersection of materials, manufacturing,
 				<h2 class="about-headline"><?php echo esc_html( $headline ); ?></h2>
 			</div>
 			<div class="about-column-right">
-				<p class="about-text"><?php echo esc_html( $content ); ?></p>
+				<p class="about-text"><?php echo nl2br( esc_html( $content ) ); ?></p>
 			</div>
 		</div>
 	</div>
