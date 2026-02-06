@@ -48,10 +48,10 @@ if ( empty( $brands ) ) {
 
 <section id="portfolio" class="section-portfolio">
 	<div class="container">
-		<h2 class="section-title"><?php echo esc_html( $title ); ?></h2>
+		<h2 class="section-title animate-on-scroll fade-in-up"><?php echo esc_html( $title ); ?></h2>
 		
 		<div class="portfolio-grid">
-			<?php foreach ( $brands as $brand ) : 
+			<?php foreach ( $brands as $index => $brand ) : 
 				$name  = isset($brand['brand_name']) ? $brand['brand_name'] : '';
 				$image = isset($brand['brand_logo']) ? $brand['brand_logo'] : '';
 				
@@ -59,8 +59,11 @@ if ( empty( $brands ) ) {
 				if ( ! $image ) {
 					$image = get_template_directory_uri() . '/assets/images/placeholder-brand.jpg';
 				}
+
+                // Stagger animations based on index (modulo 3 for grid)
+                $delay = ( $index % 3 ) * 100;
 			?>
-				<div class="brand-card">
+				<div class="brand-card animate-on-scroll fade-in-up delay-<?php echo esc_attr( $delay ); ?>">
 					<img src="<?php echo esc_url( $image ); ?>" alt="<?php echo esc_attr( $name ); ?>" class="brand-logo">
 					<h3 class="brand-name"><?php echo esc_html( $name ); ?></h3>
 				</div>

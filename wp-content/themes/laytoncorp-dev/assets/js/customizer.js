@@ -153,4 +153,11 @@
     updateVar( 'card_radius', '--card-radius', 'px' );
     updateVar( 'card_padding', '--card-padding', 'px' );
 
+    // --- MARQUEE SECTION ---
+    wp.customize( 'marquee_title', function( value ) {
+        value.bind( function( newval ) {
+            $( '.marquee-label' ).text( newval );
+        } );
+    } );
+
 } )( jQuery );

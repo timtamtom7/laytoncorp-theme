@@ -664,3 +664,180 @@ section {
         text-align: center;
     }
 }
+
+/* Fix for Hero Background Class Mismatch */
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+.hero-background img,
+.hero-background video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Section Marquee (Partners) */
+.section-marquee {
+    padding: 60px 0;
+    background: var(--color-bg);
+    overflow: hidden;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.marquee-label {
+    text-align: center;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    opacity: 0.5;
+    margin-bottom: 40px;
+    font-weight: 600;
+}
+
+.marquee-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    /* Gradient mask to fade edges */
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.marquee-track {
+    display: flex;
+    gap: 80px;
+    width: max-content;
+    animation: marquee-scroll 40s linear infinite;
+    align-items: center;
+}
+
+.marquee-item {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.marquee-item img {
+    height: 32px; /* Fixed height for logos */
+    width: auto;
+    opacity: 0.4;
+    transition: all 0.4s ease;
+    filter: grayscale(100%) brightness(1.2);
+}
+
+.marquee-item img:hover {
+    opacity: 1;
+    filter: grayscale(0%) brightness(1);
+    transform: scale(1.1);
+}
+
+@keyframes marquee-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* Pause on hover for accessibility/inspection */
+.marquee-track:hover {
+    animation-play-state: paused;
+}
+
+/* Scroll Animations */
+body.animations-enabled .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+
+body.animations-enabled .animate-on-scroll.in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Stagger delays for cards */
+body.animations-enabled .feature-card:nth-child(1) { transition-delay: 0.1s; }
+body.animations-enabled .feature-card:nth-child(2) { transition-delay: 0.2s; }
+body.animations-enabled .feature-card:nth-child(3) { transition-delay: 0.3s; }
+body.animations-enabled .feature-card:nth-child(4) { transition-delay: 0.4s; }
+
+body.animations-enabled .portfolio-item:nth-child(1) { transition-delay: 0.1s; }
+body.animations-enabled .portfolio-item:nth-child(2) { transition-delay: 0.2s; }
+body.animations-enabled .portfolio-item:nth-child(3) { transition-delay: 0.3s; }
+
+/* Scroll Animations */
+body.animations-enabled .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+
+body.animations-enabled .animate-on-scroll.in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Stagger delays for cards */
+body.animations-enabled .feature-card:nth-child(1) { transition-delay: 0.1s; }
+body.animations-enabled .feature-card:nth-child(2) { transition-delay: 0.2s; }
+body.animations-enabled .feature-card:nth-child(3) { transition-delay: 0.3s; }
+body.animations-enabled .feature-card:nth-child(4) { transition-delay: 0.4s; }
+
+body.animations-enabled .portfolio-item:nth-child(1) { transition-delay: 0.1s; }
+body.animations-enabled .portfolio-item:nth-child(2) { transition-delay: 0.2s; }
+body.animations-enabled .portfolio-item:nth-child(3) { transition-delay: 0.3s; }
+
+/* =========================================
+   Scroll Animations
+   ========================================= */
+
+/* Only apply if animations are enabled via body class */
+body.animations-enabled .animate-on-scroll {
+    opacity: 0;
+    transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: opacity, transform;
+}
+
+body.animations-enabled .animate-on-scroll.is-visible {
+    opacity: 1;
+    transform: none;
+}
+
+/* Animation Types */
+body.animations-enabled .fade-in-up {
+    transform: translateY(40px);
+}
+
+body.animations-enabled .fade-in-left {
+    transform: translateX(-30px);
+}
+
+body.animations-enabled .fade-in-right {
+    transform: translateX(30px);
+}
+
+body.animations-enabled .scale-up {
+    transform: scale(0.95);
+}
+
+/* Stagger Delays */
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+.delay-400 { transition-delay: 400ms; }
+.delay-500 { transition-delay: 500ms; }
+
+/* Disable animations for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    body.animations-enabled .animate-on-scroll {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}

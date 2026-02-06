@@ -93,6 +93,21 @@ function laytoncorp_customize_register( $wp_customize ) {
         'input_attrs' => array( 'min' => 0, 'max' => 50 ),
     ) );
 
+    // Button Border
+    $wp_customize->add_setting( 'btn_border_width', array( 'default' => '0', 'transport' => 'postMessage' ) );
+    $wp_customize->add_control( 'btn_border_width', array(
+        'label' => 'Border Width (px)',
+        'section' => 'laytoncorp_buttons_section',
+        'type' => 'range',
+        'input_attrs' => array( 'min' => 0, 'max' => 5 ),
+    ) );
+
+    $wp_customize->add_setting( 'btn_border_color', array( 'default' => 'transparent', 'transport' => 'postMessage' ) );
+    $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'btn_border_color', array(
+        'label'    => 'Border Color',
+        'section'  => 'laytoncorp_buttons_section',
+    ) ) );
+
     // Button Padding Y
     $wp_customize->add_setting( 'btn_padding_y', array( 'default' => '12', 'transport' => 'postMessage' ) );
     $wp_customize->add_control( 'btn_padding_y', array(
@@ -136,6 +151,14 @@ function laytoncorp_customize_register( $wp_customize ) {
         'input_attrs' => array( 'min' => 12, 'max' => 24 ),
     ) );
 
+    $wp_customize->add_setting( 'body_line_height', array( 'default' => '1.6', 'transport' => 'postMessage' ) );
+    $wp_customize->add_control( 'body_line_height', array(
+        'label' => 'Body Line Height',
+        'section' => 'laytoncorp_typography_section',
+        'type' => 'number',
+        'input_attrs' => array( 'min' => 1, 'max' => 2.5, 'step' => 0.1 ),
+    ) );
+
     $wp_customize->add_setting( 'h1_font_size', array( 'default' => '4', 'transport' => 'postMessage' ) );
     $wp_customize->add_control( 'h1_font_size', array(
         'label' => 'H1 Scale (em)',
@@ -166,6 +189,14 @@ function laytoncorp_customize_register( $wp_customize ) {
         'section' => 'laytoncorp_typography_section',
         'type' => 'select',
         'choices' => array( '400' => 'Regular', '500' => 'Medium', '600' => 'SemiBold', '700' => 'Bold', '900' => 'Black' ),
+    ) );
+
+    $wp_customize->add_setting( 'heading_letter_spacing', array( 'default' => '-0.02', 'transport' => 'postMessage' ) );
+    $wp_customize->add_control( 'heading_letter_spacing', array(
+        'label' => 'Heading Spacing (em)',
+        'section' => 'laytoncorp_typography_section',
+        'type' => 'number',
+        'input_attrs' => array( 'min' => -0.1, 'max' => 0.5, 'step' => 0.01 ),
     ) );
 
     // Section: Cards (New)
@@ -219,6 +250,21 @@ function laytoncorp_customize_register( $wp_customize ) {
         'section' => 'laytoncorp_layout_section',
         'type' => 'range',
         'input_attrs' => array( 'min' => 40, 'max' => 200, 'step' => 8 ),
+    ) );
+
+
+    // Section: Motion (New)
+    $wp_customize->add_section( 'laytoncorp_motion_section', array(
+        'title'    => __( 'Motion & Interaction', 'laytoncorp' ),
+        'panel'    => 'laytoncorp_design_panel',
+        'priority' => 55,
+    ) );
+
+    $wp_customize->add_setting( 'enable_animations', array( 'default' => true, 'transport' => 'refresh' ) );
+    $wp_customize->add_control( 'enable_animations', array(
+        'label' => 'Enable Scroll Animations',
+        'section' => 'laytoncorp_motion_section',
+        'type' => 'checkbox',
     ) );
 
 
@@ -506,6 +552,37 @@ function laytoncorp_customize_register( $wp_customize ) {
         'priority'    => 40,
     ) );
 
+    // Section: Marquee (Partners)
+    $wp_customize->add_section( 'laytoncorp_marquee_section', array(
+        'title'    => __( 'Partners Marquee', 'laytoncorp' ),
+        'panel'    => 'laytoncorp_sections_panel',
+        'priority' => 5,
+    ) );
+
+    $wp_customize->add_setting( 'marquee_enable', array( 'default' => false, 'transport' => 'refresh' ) );
+    $wp_customize->add_control( 'marquee_enable', array(
+        'label' => 'Enable Marquee',
+        'section' => 'laytoncorp_marquee_section',
+        'type' => 'checkbox',
+    ) );
+
+    $wp_customize->add_setting( 'marquee_title', array( 'default' => 'Trusted by Industry Leaders', 'transport' => 'postMessage' ) );
+    $wp_customize->add_control( 'marquee_title', array(
+        'label' => 'Section Title',
+        'section' => 'laytoncorp_marquee_section',
+        'type' => 'text',
+    ) );
+
+    // Loop for 6 Logo Slots
+    for ( $i = 1; $i <= 6; $i++ ) {
+        $wp_customize->add_setting( "marquee_logo_{$i}", array( 'default' => '', 'transport' => 'refresh' ) );
+        $wp_customize->add_control( new WP_Customize_Media_Control( $wp_customize, "marquee_logo_{$i}", array(
+            'label' => "Partner Logo {$i}",
+            'section' => 'laytoncorp_marquee_section',
+            'mime_type' => 'image',
+        ) ) );
+    }
+
 
     // --- FEATURES SECTION (New) ---
     $wp_customize->add_section( 'laytoncorp_features_section', array(
@@ -654,126 +731,6 @@ function laytoncorp_customize_register( $wp_customize ) {
 
 }
 add_action( 'customize_register', 'laytoncorp_customize_register' );
-
-
-/**
- * Dynamic CSS Output
- */
-function laytoncorp_customizer_css() {
-    $bg_color = get_theme_mod( 'color_bg', '#0a0a0a' );
-    $text_color = get_theme_mod( 'color_text', '#ffffff' );
-    $accent_color = get_theme_mod( 'color_accent', '#3b82f6' );
-
-    $btn_bg = get_theme_mod( 'btn_bg_color', '#ffffff' );
-    $btn_text = get_theme_mod( 'btn_text_color', '#000000' );
-    $btn_radius = get_theme_mod( 'btn_radius', '0' );
-    $btn_pad_y = get_theme_mod( 'btn_padding_y', '12' );
-    $btn_pad_x = get_theme_mod( 'btn_padding_x', '32' );
-    $btn_transform = get_theme_mod( 'btn_transform', 'uppercase' );
-
-    $base_font_size = get_theme_mod( 'body_font_size', '16' );
-    $h1_size = get_theme_mod( 'h1_font_size', '4' );
-    $h2_size = get_theme_mod( 'h2_font_size', '3' );
-    $h3_size = get_theme_mod( 'h3_font_size', '2' );
-    $heading_weight = get_theme_mod( 'heading_font_weight', '700' );
-
-    $card_bg = get_theme_mod( 'card_bg_color', '#1a1a1a' );
-    $card_radius = get_theme_mod( 'card_radius', '0' );
-    $card_padding = get_theme_mod( 'card_padding', '24' );
-    
-    $portfolio_gap = get_theme_mod( 'portfolio_gap', '24' );
-    // Convert column count to percentage/fr logic in CSS or just grid-template-columns
-    $portfolio_cols = get_theme_mod( 'portfolio_columns', '3' );
-
-    $header_height = get_theme_mod( 'header_height', '80' );
-    $header_bg_scrolled = get_theme_mod( 'header_bg_scrolled', 'rgba(10,10,10,0.95)' );
-    $header_logo_width = get_theme_mod( 'header_logo_width', '150' );
-    $header_menu_gap = get_theme_mod( 'header_menu_gap', '32' );
-
-    $footer_pad_y = get_theme_mod( 'footer_padding_y', '64' );
-    $footer_bg = get_theme_mod( 'footer_bg_color', '#000000' );
-    $footer_text = get_theme_mod( 'footer_text_color', '#888888' );
-
-    $container_width = get_theme_mod( 'container_width', '1280' );
-    $section_spacing = get_theme_mod( 'section_spacing', '96' );
-
-    // Hero Style
-    $hero_opacity = get_theme_mod( 'hero_overlay_opacity', '0.3' );
-    $hero_align = get_theme_mod( 'hero_alignment', 'center' );
-    $hero_title_size = get_theme_mod( 'hero_title_size', '4' );
-
-    $custom_css = "
-        :root {
-            --color-bg: {$bg_color};
-            --color-text: {$text_color};
-            --color-accent: {$accent_color};
-            
-            --btn-bg: {$btn_bg};
-            --btn-text: {$btn_text};
-            --btn-radius: {$btn_radius}px;
-            --btn-pad-y: {$btn_pad_y}px;
-            --btn-pad-x: {$btn_pad_x}px;
-            --btn-transform: {$btn_transform};
-            
-            --font-size-base: {$base_font_size}px;
-            --h1-size: {$h1_size}em;
-            --h2-size: {$h2_size}em;
-            --h3-size: {$h3_size}em;
-            --heading-weight: {$heading_weight};
-
-            --card-bg: {$card_bg};
-            --card-radius: {$card_radius}px;
-            --card-padding: {$card_padding}px;
-            --grid-gap: {$portfolio_gap}px;
-
-            --header-height: {$header_height}px;
-            --header-bg-scrolled: {$header_bg_scrolled};
-            --header-logo-width: {$header_logo_width}px;
-            --header-menu-gap: {$header_menu_gap}px;
-
-            --footer-pad-y: {$footer_pad_y}px;
-            --footer-bg: {$footer_bg};
-            --footer-text: {$footer_text};
-
-            --container-width: {$container_width}px;
-            --section-spacing: {$section_spacing}px;
-
-            --hero-overlay: rgba(0,0,0, {$hero_opacity});
-            --hero-align: {$hero_align};
-            --hero-title-size: {$hero_title_size}rem;
-        }
-
-        /* Portfolio Grid Override */
-        .portfolio-grid {
-            grid-template-columns: repeat({$portfolio_cols}, 1fr);
-            gap: var(--grid-gap);
-        }
-        @media (max-width: 768px) {
-            .portfolio-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        @media (max-width: 480px) {
-            .portfolio-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        /* Apply Hero Styles */
-        .hero-overlay {
-            background-color: var(--hero-overlay);
-        }
-        .hero-content {
-            text-align: var(--hero-align);
-            align-items: " . ($hero_align === 'left' ? 'flex-start' : ($hero_align === 'right' ? 'flex-end' : 'center')) . ";
-        }
-        .hero-title {
-            font-size: clamp(2rem, 5vw, var(--hero-title-size));
-        }
-    ";
-    wp_add_inline_style( 'laytoncorp-main', $custom_css );
-}
-add_action( 'wp_enqueue_scripts', 'laytoncorp_customizer_css' );
 
 
 /**

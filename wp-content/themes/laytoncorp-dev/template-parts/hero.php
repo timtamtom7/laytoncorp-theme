@@ -94,10 +94,10 @@ if ( 'video' === $hero_mode ) {
 		<div class="hero-overlay"></div>
 		
 		<div class="hero-content">
-			<h1 class="hero-title"><?php echo esc_html( $headline ); ?></h1>
-			<p class="hero-subtitle"><?php echo esc_html( $subheadline ); ?></p>
+			<h1 class="hero-title animate-on-scroll fade-in-up"><?php echo esc_html( $headline ); ?></h1>
+			<p class="hero-subtitle animate-on-scroll fade-in-up delay-200"><?php echo esc_html( $subheadline ); ?></p>
 			<?php if ( $cta_text ) : ?>
-				<a href="<?php echo esc_url( $cta_link ); ?>" class="btn"><?php echo esc_html( $cta_text ); ?></a>
+				<a href="<?php echo esc_url( $cta_link ); ?>" class="btn animate-on-scroll fade-in-up delay-300"><?php echo esc_html( $cta_text ); ?></a>
 			<?php endif; ?>
 		</div>
 
@@ -115,10 +115,10 @@ if ( 'video' === $hero_mode ) {
 		<div class="hero-overlay"></div>
 
 		<div class="hero-content">
-			<h1 class="hero-title"><?php echo esc_html( $headline ); ?></h1>
-			<p class="hero-subtitle"><?php echo esc_html( $subheadline ); ?></p>
+			<h1 class="hero-title animate-on-scroll fade-in-up"><?php echo esc_html( $headline ); ?></h1>
+			<p class="hero-subtitle animate-on-scroll fade-in-up delay-200"><?php echo esc_html( $subheadline ); ?></p>
 			<?php if ( $cta_text ) : ?>
-				<a href="<?php echo esc_url( $cta_link ); ?>" class="btn"><?php echo esc_html( $cta_text ); ?></a>
+				<a href="<?php echo esc_url( $cta_link ); ?>" class="btn animate-on-scroll fade-in-up delay-300"><?php echo esc_html( $cta_text ); ?></a>
 			<?php endif; ?>
 		</div>
 
@@ -154,10 +154,10 @@ if ( 'video' === $hero_mode ) {
 		<div class="hero-overlay"></div>
 
 		<div class="hero-content">
-			<h1 class="hero-title"><?php echo esc_html( $headline ); ?></h1>
-			<p class="hero-subtitle"><?php echo esc_html( $subheadline ); ?></p>
+			<h1 class="hero-title animate-on-scroll fade-in-up"><?php echo esc_html( $headline ); ?></h1>
+			<p class="hero-subtitle animate-on-scroll fade-in-up delay-200"><?php echo esc_html( $subheadline ); ?></p>
 			<?php if ( $cta_text ) : ?>
-				<a href="<?php echo esc_url( $cta_link ); ?>" class="btn"><?php echo esc_html( $cta_text ); ?></a>
+				<a href="<?php echo esc_url( $cta_link ); ?>" class="btn animate-on-scroll fade-in-up delay-300"><?php echo esc_html( $cta_text ); ?></a>
 			<?php endif; ?>
 		</div>
 
